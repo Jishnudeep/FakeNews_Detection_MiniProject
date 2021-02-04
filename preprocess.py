@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-
+# In[3]:
 
 
 import pandas as pd
@@ -14,7 +14,7 @@ from nltk.tokenize import word_tokenize
 import seaborn as sb
 
 
-
+# In[4]:
 
 
 train_news = pd.read_csv("train.csv")
@@ -22,7 +22,7 @@ test_news = pd.read_csv("test.csv")
 valid_news = pd.read_csv("valid.csv")
 
 
-
+# In[5]:
 
 
 def data_obs():
@@ -38,7 +38,7 @@ def data_obs():
     print(valid_news.head(10))
 
 
-
+# In[6]:
 
 
 def create_distribution(dataFile):
@@ -47,7 +47,7 @@ def create_distribution(dataFile):
     
 
 
-
+# In[7]:
 
 
 create_distribution(train_news)
@@ -55,7 +55,7 @@ create_distribution(test_news)
 create_distribution(valid_news)
 
 
-
+# In[8]:
 
 
 def data_qualityCheck():
@@ -74,13 +74,13 @@ def data_qualityCheck():
     valid_news.info()
 
 
-
+# In[9]:
 
 
 data_qualityCheck()
 
 
-
+# In[10]:
 
 
 #Stemming
@@ -88,7 +88,7 @@ eng_stemmer = SnowballStemmer('english')
 stopwords = set(nltk.corpus.stopwords.words('english'))
 
 
-
+# In[11]:
 
 
 def stem_tokens(tokens, stemmer):
@@ -98,13 +98,13 @@ def stem_tokens(tokens, stemmer):
     return stemmed
 
 
-
+# In[12]:
 
 
 #Data processing
 
 
-
+# In[13]:
 
 
 def process_data(data,exclude_stopword=True,stem=True):
@@ -115,13 +115,13 @@ def process_data(data,exclude_stopword=True,stem=True):
     return tokens_stemmed
 
 
-
+# In[14]:
 
 
 #process_data(stem_tokens(stopwords, eng_stemmer))
 
 
-
+# In[15]:
 
 
 #creating ngrams
@@ -165,37 +165,60 @@ def create_trigrams(words):
         lst = create_bigram(words)
 
 
-
+# In[16]:
 
 
 porter = PorterStemmer()
 
 
-
+# In[17]:
 
 
 def tokenizer(text):
     return text.split()
 
 
-
+# In[18]:
 
 
 def tokenizer_porter(text):
     return [porter.stem(word) for word in text.split()]
 
 
-
+# In[19]:
 
 
 #doc = ['runners like running and thus they run','this is a test for tokens']
 #tokenizer([[word for word in test_news.iloc[:,1]] for word in line.lower().split()])
 
 
+# In[22]:
+
+
+""""#converting multiclass labels present in our datasets to binary class labels
+for i , row in train_news.iterrows():
+    if ((train_news.iloc[:,0] == "mostly-true") | (train_news.iloc[:,0] == "half-true") | (train_news.iloc[:,0] == "true")):
+        train_news.iloc[:,0] = "true"
+    else :
+        train_news.iloc[:,0] = "false"
+        
+for i,row in train_news.iterrows():
+    print(row)
+"""
+
+# In[ ]:
 
 
 
 
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
 
 
 
