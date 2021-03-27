@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
 
 import pandas as pd
 import csv
@@ -14,8 +9,6 @@ from nltk.tokenize import word_tokenize
 import seaborn as sb
 
 
-# In[2]:
-
 
 train_news = pd.read_csv("train.csv")
 test_news = pd.read_csv("test.csv")
@@ -23,7 +16,7 @@ valid_news = pd.read_csv("valid.csv")
 train_news.head()
 
 
-# In[3]:
+
 
 
 def data_obs():
@@ -39,7 +32,7 @@ def data_obs():
     print(valid_news.head(10))
 
 
-# In[4]:
+
 
 
 def create_distribution(dataFile):
@@ -48,7 +41,6 @@ def create_distribution(dataFile):
     
 
 
-# In[5]:
 
 
 create_distribution(train_news)
@@ -56,7 +48,6 @@ create_distribution(test_news)
 create_distribution(valid_news)
 
 
-# In[6]:
 
 
 def data_qualityCheck():
@@ -75,13 +66,12 @@ def data_qualityCheck():
     valid_news.info()
 
 
-# In[7]:
+
 
 
 data_qualityCheck()
 
 
-# In[8]:
 
 
 #Stemming
@@ -89,7 +79,7 @@ eng_stemmer = SnowballStemmer('english')
 stopwords = set(nltk.corpus.stopwords.words('english'))
 
 
-# In[9]:
+
 
 
 def stem_tokens(tokens, stemmer):
@@ -99,13 +89,13 @@ def stem_tokens(tokens, stemmer):
     return stemmed
 
 
-# In[10]:
+
 
 
 #Data processing
 
 
-# In[11]:
+
 
 
 def process_data(data,exclude_stopword=True,stem=True):
@@ -116,13 +106,13 @@ def process_data(data,exclude_stopword=True,stem=True):
     return tokens_stemmed
 
 
-# In[12]:
+
 
 
 #process_data(stem_tokens(stopwords, eng_stemmer))
 
 
-# In[13]:
+
 
 
 #creating ngrams
@@ -166,70 +156,33 @@ def create_trigrams(words):
         lst = create_bigram(words)
 
 
-# In[14]:
+
 
 
 porter = PorterStemmer()
 
 
-# In[15]:
+
 
 
 def tokenizer(text):
     return text.split()
 
 
-# In[16]:
+
 
 
 def tokenizer_porter(text):
     return [porter.stem(word) for word in text.split()]
 
 
-# In[17]:
+
 
 
 #doc = ['runners like running and thus they run','this is a test for tokens']
 #tokenizer([[word for word in test_news.iloc[:,1]] for word in line.lower().split()])
 
 
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 
