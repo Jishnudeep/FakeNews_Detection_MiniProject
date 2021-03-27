@@ -20,6 +20,7 @@ import seaborn as sb
 train_news = pd.read_csv("train.csv")
 test_news = pd.read_csv("test.csv")
 valid_news = pd.read_csv("valid.csv")
+train_news.head()
 
 
 # In[3]:
@@ -192,18 +193,28 @@ def tokenizer_porter(text):
 #tokenizer([[word for word in test_news.iloc[:,1]] for word in line.lower().split()])
 
 
-# In[18]:
+# In[ ]:
 
 
-#converting multiclass labels present in our datasets to binary class labels
-for i , row in train_news.iterrows():
-    if ((train_news.iloc[:,0] == "mostly-true") | (train_news.iloc[:,0] == "half-true") | (train_news.iloc[:,0] == "true")):
-        train_news.iloc[:,0] = "true"
-    else :
-        train_news.iloc[:,0] = "false"
-        
-for i,row in train_news.iterrows():
-    print(row)
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
 
 
 # In[ ]:
