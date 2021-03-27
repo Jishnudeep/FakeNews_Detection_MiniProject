@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[3]:
-
 
 import Preprocess
 import pandas as pd
@@ -17,7 +12,6 @@ from nltk.tokenize import word_tokenize
 from gensim.models import Word2Vec
 
 
-# In[4]:
 
 
 #Bag of words
@@ -27,7 +21,7 @@ print(countV)
 print(train_count)
 
 
-# In[5]:
+
 
 
 def get_countVectorizer_stats():
@@ -38,7 +32,7 @@ def get_countVectorizer_stats():
 #get_countVectorizer_stats()
 
 
-# In[6]:
+
 
 
 #tf-idf
@@ -46,7 +40,6 @@ tfidfV = TfidfTransformer()
 train_tfidf = tfidfV.fit_transform(train_count)
 
 
-# In[7]:
 
 
 def get_tfidf_stats():
@@ -56,7 +49,6 @@ def get_tfidf_stats():
 #get_tfidf_stats()
 
 
-# In[8]:
 
 
 #bag of words - with n-grams
@@ -64,13 +56,13 @@ countV_ngram = CountVectorizer(ngram_range=(1,3),stop_words='english')
 tfidf_ngram  = TfidfTransformer(use_idf=True,smooth_idf=True)
 
 
-# In[9]:
+
 
 
 tfidf_ngram = TfidfVectorizer(stop_words='english',ngram_range=(1,4),use_idf=True,smooth_idf=True)
 
 
-# In[12]:
+
 
 
 #POS Tagging
@@ -81,7 +73,7 @@ training_sentences = Preprocess.train_news['Statement']
 print(training_sentences)
 
 
-# In[13]:
+
 
 
 #training POS tagger based on words
@@ -107,7 +99,7 @@ def features(sentence, index):
     }
 
 
-# In[14]:
+
 
 
 #function to strip tags from tagged corpus
@@ -115,7 +107,7 @@ def untag(tagged_sentence):
     return [w for w,t in tagged_sentence]
 
 
-# In[15]:
+
 
 
 #using Word2Vec
@@ -123,14 +115,14 @@ with open("glove.6B.100d.txt","rb") as lines:
    w2v = {line.split()[0]: np.array(map(float,line.split()[1:])) for line in lines}
 
 
-# In[16]:
+
 
 
 #model = Word2Vec(x, size=100) # x be tokenized text
 #w2v = dict(zip(model.wv.index2word, model.wv.syn0))
 
 
-# In[17]:
+
 
 
 class MeanEmbeddingVectorizer(object):
@@ -149,7 +141,7 @@ class MeanEmbeddingVectorizer(object):
         ])
 
 
-# In[18]:
+
 
 
 class TfidfEmbeddingVectorizer(object):
@@ -175,27 +167,6 @@ class TfidfEmbeddingVectorizer(object):
                         [np.zeros(self.dim)], axis=0)
                 for words in X
             ])
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 
