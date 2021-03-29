@@ -211,3 +211,144 @@ by running both random forest and logistic regression with GridSearch's best par
 forest model with n-gram has better accuracty than with the parameter estimated. The logistic regression model with best parameter 
 has almost similar performance as n-gram model so logistic regression will be out choice of model for prediction.
 """
+
+#saving best model to the disk
+model_file = 'final_model.sav'
+pickle.dump(logR_pipeline_ngram,open(model_file,'wb'))
+
+
+#Plotting learing curve
+def plot_learing_curve(pipeline,title):
+    size = 10000
+    cv = KFold(size, shuffle=True)
+    
+    X = Preprocess.train_news["Statement"]
+    y = Preprocess.train_news["Label"]
+    
+    pl = pipeline
+    pl.fit(X,y)
+    
+    train_sizes, train_scores, test_scores = learning_curve(pl, X, y, n_jobs=-1, cv=cv, train_sizes=np.linspace(.1, 1.0, 5), verbose=0)
+       
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+     
+    plt.figure()
+    plt.title(title)
+    plt.legend(loc="best")
+    plt.xlabel("Training examples")
+    plt.ylabel("Score")
+    plt.gca().invert_yaxis()
+    
+    # box-like grid
+    plt.grid()
+    
+    # plot the std deviation as a transparent range at each training set size
+    plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, alpha=0.1, color="r")
+    plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, alpha=0.1, color="g")
+    
+    # plot the average training and test score lines at each training set size
+    plt.plot(train_sizes, train_scores_mean, 'o-', color="r", label="Training score")
+    plt.plot(train_sizes, test_scores_mean, 'o-', color="g", label="Cross-validation score")
+    
+    # sizes the window for readability and displays the plot
+    # shows error from 0 to 1.1
+    plt.ylim(-.1,1.1)
+    plt.show()
+
+
+#below command will plot learing curves for each of the classifiers
+plot_learing_curve(logR_pipeline_ngram,"Logistic Regression Classifier")
+plot_learing_curve(nb_pipeline_ngram,"Naive Bayes Classifier")
+plot_learing_curve(random_forest_ngram,"RandomForest Classifier")
+
+"""
+by plotting the learning cureve for logistic regression, it can be seen that cross-validation score is stagnating throughout and it 
+is unable to learn from data. Also we see that there are high errors that indicates model is simple and we may want to increase the
+model complexity.
+"""
+
+
+#plotting Precision-Recall curve
+def plot_PR_curve(classifier):
+    
+    precision, recall, thresholds = precision_recall_curve(Preprocess.test_news['Label'], classifier)
+    average_precision = average_precision_score(Preprocess.test_news['Label'], classifier)
+    
+    plt.step(recall, precision, color='b', alpha=0.2,
+             where='post')
+    plt.fill_between(recall, precision, step='post', alpha=0.2,
+                     color='b')
+    
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.ylim([0.0, 1.05])
+    plt.xlim([0.0, 1.0])
+    plt.title('2-class Random Forest Precision-Recall curve: AP={0:0.2f}'.format(
+              average_precision))
+    
+plot_PR_curve(predicted_LogR_ngram)
+plot_PR_curve(predicted_rf_ngram)
+
+
+"""
+Now let's extract the most informative feature from ifidf vectorizer for all fo the classifiers and see of there are any common
+words that we can identify i.e. are these most informative feature acorss the classifiers are same? we will create a function that 
+will extract top 50 features.
+"""
+
+def show_most_informative_features(model, vect, clf, text=None, n=50):
+    # Extract the vectorizer and the classifier from the pipeline
+    vectorizer = model.named_steps[vect]
+    classifier = model.named_steps[clf]
+
+     # Check to make sure that we can perform this computation
+    if not hasattr(classifier, 'coef_'):
+        raise TypeError(
+            "Cannot compute most informative features on {}.".format(
+                classifier.__class__.__name__
+            )
+        )
+            
+    if text is not None:
+        # Compute the coefficients for the text
+        tvec = model.transform([text]).toarray()
+    else:
+        # Otherwise simply use the coefficients
+        tvec = classifier.coef_
+
+    # Zip the feature names with the coefs and sort
+    coefs = sorted(
+        zip(tvec[0], vectorizer.get_feature_names()),
+        reverse=True
+    )
+    
+    # Get the top n and bottom n coef, name pairs
+    topn  = zip(coefs[:n], coefs[:-(n+1):-1])
+
+    # Create the output string to return
+    output = []
+
+    # If text, add the predicted value to the output.
+    if text is not None:
+        output.append("\"{}\"".format(text))
+        output.append(
+            "Classified as: {}".format(model.predict([text]))
+        )
+        output.append("")
+
+    # Create two columns with most negative and most positive features.
+    for (cp, fnp), (cn, fnn) in topn:
+        output.append(
+            "{:0.4f}{: >15}    {:0.4f}{: >15}".format(
+                cp, fnp, cn, fnn
+            )
+        )
+    #return "\n".join(output)
+    print(output)
+
+show_most_informative_features(logR_pipeline_ngram,vect='LogR_tfidf',clf='LogR_clf')
+show_most_informative_features(nb_pipeline_ngram,vect='nb_tfidf',clf='nb_clf')
+
