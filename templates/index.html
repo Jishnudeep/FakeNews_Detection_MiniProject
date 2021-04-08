@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "UTF-8">
+        <title> Fake News Detection </title>
+    </head>
+    
+<body>
+    <div class = "Input">
+        <h1> Detect Degree of Truth of News Statement </h1>
+        <h3> Enter the news statement here </h3>
+            <!-- Main input for receiving query to our model -->
+            <form action ="{{ url_for('predict')}}" method = "post">
+                <input type = "text" name = "statement" placeholder = "Enter News Statement" required = "required"/>
+            <button type = "submit" class = "btn"> Detect </button>
+            </form>
+        <br>
+        <br>
+        {{prediction_text}}
+        {{prediction_probability}}        
+    </div>
+</body>
+</html>

@@ -7,12 +7,13 @@ from nltk.stem import SnowballStemmer
 from nltk.stem.porter import PorterStemmer
 from nltk.tokenize import word_tokenize
 import seaborn as sb
+from matplotlib import pyplot as plt
 
 
 
 train_news = pd.read_csv("train.csv")
 test_news = pd.read_csv("test.csv")
-valid_news = pd.read_csv("valid.csv")
+#valid_news = pd.read_csv("valid.csv")
 train_news.head()
 
 
@@ -28,8 +29,8 @@ def data_obs():
     print(test_news.shape)
     print(test_news.head(10))
     
-    print(valid_news.shape)
-    print(valid_news.head(10))
+    #print(valid_news.shape)
+    #print(valid_news.head(10))
 
 
 
@@ -37,7 +38,7 @@ def data_obs():
 
 def create_distribution(dataFile):
     
-    return sb.countplot(x="Label",data=dataFile, palette='hls')
+    sb.countplot(x="Label",data=dataFile)
     
 
 
@@ -45,7 +46,7 @@ def create_distribution(dataFile):
 
 create_distribution(train_news)
 create_distribution(test_news)
-create_distribution(valid_news)
+#create_distribution(valid_news)
 
 
 
@@ -62,8 +63,8 @@ def data_qualityCheck():
     test_news.isnull().sum()
     test_news.info()
 
-    valid_news.isnull().sum()
-    valid_news.info()
+    #valid_news.isnull().sum()
+    #valid_news.info()
 
 
 
@@ -98,8 +99,8 @@ def stem_tokens(tokens, stemmer):
 
 
 
-def process_data(data,exclude_stopword=True,stem=True):
-    tokens = [w.lower() for w in data]
+def process_data(data, exclude_stopword=True, stem=True):
+    tokens = [w for w in data]
     tokens_stemmed = tokens
     tokens_stemmed = stem_tokens(tokens, eng_stemmer)
     tokens_stemmed = [w for w in tokens_stemmed if w not in stopwords ]
@@ -109,7 +110,7 @@ def process_data(data,exclude_stopword=True,stem=True):
 
 
 
-#process_data(stem_tokens(stopwords, eng_stemmer))
+process_data(stem_tokens(stopwords, eng_stemmer))
 
 
 
@@ -130,9 +131,9 @@ def create_bigram(words):
     if Len > 1:
         lst = []
         for i in range(Len-1):
-            for j in range(1,skip+2):
-                if i+k < Len:
-                    lst.append(join_str.join([words[i],words[i+k]]))
+            for j in range(1, skip+2):
+                if i+ j < Len:
+                    lst.append(join_str.join([words[i], words[i+j]]))
     else:
     #set it as unigram
         lst = create_unigram(words)
@@ -141,16 +142,16 @@ def create_bigram(words):
 #trigrams
 def create_trigrams(words):
     assert type(words) == list
-    skip == 0
+    skip = 0
     join_str = " "
     Len = len(words)
-    if L > 2:
+    if Len > 2:
         lst = []
-        for i in range(1,skip+2):
-            for j1 in range(1,skip+2):
-                for j2 in range(1,skip+2):
+        for i in range(1, skip+2):
+            for j1 in range(1, skip+2):
+                for j2 in range(1, skip+2):
                     if i+j1 < Len and i+j1+j2 < Len:
-                        lst.append(join_str.join([words[i],words[i+j1+j2]]))
+                        lst.append(join_str.join([words[i], words[i+j1+j2]]))
     else:
         #set is as bigram
         lst = create_bigram(words)
@@ -173,7 +174,7 @@ def tokenizer(text):
 
 
 def tokenizer_porter(text):
-    return [porter.stem(word) for word in text.split()]
+    return [porter.stem(word.lower()) for word in text.split()]
 
 
 

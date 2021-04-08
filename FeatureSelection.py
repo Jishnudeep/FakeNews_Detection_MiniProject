@@ -9,8 +9,9 @@ from sklearn.pipeline import Pipeline
 import nltk
 import nltk.corpus
 from nltk.tokenize import word_tokenize
+from collections import defaultdict
+import gensim
 from gensim.models import Word2Vec
-
 
 
 
@@ -27,7 +28,7 @@ print(train_count)
 def get_countVectorizer_stats():
     train_count.shape
     print(countV.vocabulary_)
-    printf(countV.get_feature_names()[:25])
+    print(countV.get_feature_names()[:25])
 
 #get_countVectorizer_stats()
 
@@ -118,8 +119,8 @@ with open("glove.6B.100d.txt","rb") as lines:
 
 
 
-#model = Word2Vec(x, size=100) # x be tokenized text
-#w2v = dict(zip(model.wv.index2word, model.wv.syn0))
+model = Word2Vec(size=100) # x be tokenized text
+w2v = dict(zip(model.wv.index2word, model.wv.syn0))
 
 
 
