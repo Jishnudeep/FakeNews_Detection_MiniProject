@@ -32,8 +32,8 @@ def predict():
 
     #return (print("The given statement is ",prediction[0]),
       # print("The truth probability score is ",prob[0][1]))
-    return render_template('index.html', prediction_text = "The given statement is:{}".format(prediction[0]),
-                           prediction_probability = "The probability score is: {}".format(prob[0][1],".4f"))
+    return render_template('predict.html', prediction_text = "The given statement is: {}".format(prediction[0]),
+                           prediction_probability = "The probability score is: {0:.3f}".format(prob[0][1]))
 
 
 if __name__ == "__main__":

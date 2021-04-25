@@ -3,21 +3,24 @@
     <head>
         <meta charset = "UTF-8">
         <title> Fake News Detection </title>
+        <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type ="text/css" href="{{ url_for('static', filename='CSS/styles.css') }}">
     </head>
     
 <body>
     <div class = "Input">
-        <h1> Detect Degree of Truth of News Statement </h1>
-        <h3> Enter the news statement here </h3>
+        <h1> Fake News Detection </h1>
+        <h3> Enter the statement here: </h3>
             <!-- Main input for receiving query to our model -->
-            <form action ="{{ url_for('predict')}}" method = "post">
+            <form action ="{{ url_for('predict')}}" method = "post" class="form">
                 <input type = "text" name = "statement" placeholder = "Enter News Statement" required = "required"/>
             <button type = "submit" class = "btn"> Detect </button>
             </form>
         <br>
         <br>
-        {{prediction_text}}
-        {{prediction_probability}}        
     </div>
 </body>
 </html>
